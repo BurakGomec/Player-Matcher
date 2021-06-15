@@ -6,7 +6,15 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Model\" />
+    <Folder Include="ConstantVariable\" />
+    <Folder Include="Operations\" />
   </ItemGroup>
 
 
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver.Core" Version="2.12.4" />
+    <PackageReference Include="MongoDB.Bson" Version="2.12.4" />
+    <PackageReference Include="MongoDB.Driver" Version="2.12.4" />
+  </ItemGroup>
 </Project>
