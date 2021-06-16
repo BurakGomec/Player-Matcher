@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
 namespace PlayerMatcher_RestAPI.Model
 {
-    public class User
+    public class Player
     {
-
         public int id { get; set; }
 
         public bool status { get; set; } //ofline-online status
@@ -17,7 +20,7 @@ namespace PlayerMatcher_RestAPI.Model
         public string password { get; set; }
 
 
-        public User(int id, bool status, int level, string email, string password)
+        public Player(int id, bool status, int level, string email, string password)
         {
             this.id = id;
             this.status = status;

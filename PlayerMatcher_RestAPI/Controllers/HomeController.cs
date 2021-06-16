@@ -8,10 +8,7 @@ namespace PlayerMatcher_RestAPI.Controllers
     public class HomeController : ControllerBase
     {
         [HttpGet]
-        public string test()
-        {
-            return DatabaseOperations.shared.saveUserToDB();
-        }
+        public string test() => DatabaseOperations.shared.saveUserToDB();
 
         /*
         [HttpGet]
