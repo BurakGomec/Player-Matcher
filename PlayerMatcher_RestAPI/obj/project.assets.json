@@ -461,30 +461,28 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\mrter\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "/Users/burak/.nuget/packages/": {},
+    "/usr/local/share/dotnet/sdk/NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\GitHub2021\\Player-Matcher\\PlayerMatcher_RestAPI\\PlayerMatcher_RestAPI.csproj",
+      "projectUniqueName": "/Users/burak/Desktop/GitHub/Player-Matcher/PlayerMatcher_RestAPI/PlayerMatcher_RestAPI.csproj",
       "projectName": "PlayerMatcher_RestAPI",
-      "projectPath": "D:\\GitHub2021\\Player-Matcher\\PlayerMatcher_RestAPI\\PlayerMatcher_RestAPI.csproj",
-      "packagesPath": "C:\\Users\\mrter\\.nuget\\packages\\",
-      "outputPath": "D:\\GitHub2021\\Player-Matcher\\PlayerMatcher_RestAPI\\obj\\",
+      "projectPath": "/Users/burak/Desktop/GitHub/Player-Matcher/PlayerMatcher_RestAPI/PlayerMatcher_RestAPI.csproj",
+      "packagesPath": "/Users/burak/.nuget/packages/",
+      "outputPath": "/Users/burak/Desktop/GitHub/Player-Matcher/PlayerMatcher_RestAPI/obj/",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\mrter\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/burak/.config/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -534,7 +532,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.202/RuntimeIdentifierGraph.json"
       }
     }
   }
