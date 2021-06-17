@@ -8,17 +8,12 @@ namespace PlayerMatcher_RestAPI.Model
     public class Player
     {
         public int id { get; set; }
-
         public string name { get; set; }
-
         public bool status { get; set; } //ofline-online status
-
-        public int level { get; set; } //player-level
-
+        public int level { get; set; } //player's level
+        public double kdRatio { get; set; } //kill-death ratio
         //public string character { get; set;  } //warriors??
-
         public string email { get; set; }
-
         public string password { get; set; }
 
         //aynen evet ha doğru lan evet aynen kanka şey olmaz mı statusu online olanı bulcaz onun veritabanından ismini alıp geri döneriz ?

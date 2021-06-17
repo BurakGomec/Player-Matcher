@@ -7,11 +7,10 @@ namespace PlayerMatcher_RestAPI.Controllers
     public class DatabaseOperations
     {  
         public static DatabaseOperations shared = new DatabaseOperations();
-
         private MongoClient client = new MongoClient(Constant.Constants.connectionInfo);
 
 
-        public string saveUserToDB()
+        public string SaveUserToDB()
         {
             string result = "";
 
@@ -42,7 +41,7 @@ namespace PlayerMatcher_RestAPI.Controllers
         }
 
 
-        public string SignUp(Account account)
+        public bool SignUp(Account account)
         {
             try
             {
@@ -55,11 +54,12 @@ namespace PlayerMatcher_RestAPI.Controllers
                 //Db'den id çekilecek ve +1 eklenerek save edilecek....
                 
             }
-            catch(Exception e)
+            catch(Exception)
             {
-                return e.ToString();
+                return false;
             }
-            return "1";
+
+            return true;
         }
 
 
