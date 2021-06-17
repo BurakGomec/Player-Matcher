@@ -7,15 +7,17 @@ namespace PlayerMatcher_RestAPI.Model
 {
     public class Account
     {        
-        public int id { get; set; }
+        public Guid id { get; set; }
         public string email { get; set; }
         public string password { get; set; }
+        public string userName { get; set; }
 
-        public Account(int id, string email, string password)
+        public Account(Guid id, string email, string password,string userName)
         {
             this.id = id;
             this.email = email;
             this.password = password;
+            this.userName = userName;
         }
     }
 }
