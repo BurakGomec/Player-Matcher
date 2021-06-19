@@ -1,28 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PlayerMatcher_RestAPI.Model
 {
     public class Player
     {
-        public Guid id { get; set; } //unique id 
-        public string userName { get; set; }
-        public bool status { get; set; } //ofline-online status
-        public int level { get; set; } //player's level
-        public double kdRatio { get; set; } //kill-death ratio
-        public string email { get; set; }
-        public string password { get; set; }
+        public Guid id { get; set; } //Unique id-with same account's id 
+        public string userName { get; set; } //Unique userName
+        public bool status { get; set; } //Offline-online status
+        public int level { get; set; } //Player's level
+        public double kdRatio { get; set; } //Kill-death ratio
 
-
-        public Player(Guid id, bool status, int level, string email, string password)
+        public Player(Guid id, string userName, bool status, int level, double kdRatio)
         {
             this.id = id;
+            this.userName = userName;
             this.status = status;
             this.level = level;
-            this.email = email;
-            this.password = password;
+            this.kdRatio = kdRatio;
         }
     }
 }

@@ -1,12 +1,9 @@
 ﻿<Properties StartupConfiguration="{FB5E6855-CA70-465E-9DEF-2692C22DADD8}|Default">
   <MonoDevelop.Ide.ItemProperties.PlayerMatcher__RestAPI PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Model/Player.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Operations/DatabaseOperations.cs">
     <Files>
-      <File FileName="Controllers/HomeController.cs" Line="24" Column="60" />
-      <File FileName="Operations/DatabaseOperations.cs" Line="26" Column="18" />
-      <File FileName="Model/Player.cs" Line="20" Column="10" />
-      <File FileName="Model/Account.cs" Line="20" Column="38" />
-      <File FileName="Properties/launchSettings.json" Line="22" Column="29" />
+      <File FileName="Controllers/HomeController.cs" Line="17" Column="61" />
+      <File FileName="Operations/DatabaseOperations.cs" Line="70" Column="195" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -15,10 +12,10 @@
             <Node name="PlayerMatcher_RestAPI" expanded="True">
               <Node name="ConstantVariable" expanded="True" />
               <Node name="Controllers" expanded="True" />
-              <Node name="Model" expanded="True">
-                <Node name="Player.cs" selected="True" />
+              <Node name="Model" expanded="True" />
+              <Node name="Operations" expanded="True">
+                <Node name="DatabaseOperations.cs" selected="True" />
               </Node>
-              <Node name="Operations" expanded="True" />
               <Node name="Properties" expanded="True" />
             </Node>
           </Node>

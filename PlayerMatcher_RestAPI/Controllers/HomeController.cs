@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PlayerMatcher_RestAPI.Model;
-using System.Text.Json;
 
 
 namespace PlayerMatcher_RestAPI.Controllers
@@ -12,7 +11,7 @@ namespace PlayerMatcher_RestAPI.Controllers
     public class HomeController : ControllerBase
     {
 
-        [HttpGet()]
+        [HttpGet()] //Test-Method..
         public ActionResult<string> Test()
         {
             return Ok(new { message = "Matched User Name : masomo" });
@@ -29,13 +28,16 @@ namespace PlayerMatcher_RestAPI.Controllers
                 return BadRequest();
             }
             var uuid = Guid.NewGuid();
-
             account.id = uuid;
             //var account = new Account(uuid, email, password,username);
             var dbFeedback = DatabaseOperations.shared.SaveAccountToDB(account);
 
-            if (dbFeedback == "true")
-                return Ok(new { title = "Hesap basariyla olusturuldu"});
+            if (dbFeedback == "true") 
+            {
+                if(DatabaseOperations.shared.SavePlayerToDB(account)) //Kullanıcı sisteme kayıt oldu ise kullanıcıya bir oyuncu hesabı oluşturulup veri tabanına kayıt ediliyor
+                    return Ok(new { title = "Hesap basariyla olusturuldu" });
+                else return Problem(title: "Hesabınız yaratılırken bir hata meydana geldi");
+            }
             else if(dbFeedback == "false")
                 return Problem(title: "Girdiginiz bilgiler veri tabanında yer almaktadır, lutfen bilgilerinizi kontrol ediniz");
             else
