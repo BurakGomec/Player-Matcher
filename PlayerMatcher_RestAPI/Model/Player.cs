@@ -12,7 +12,6 @@ namespace PlayerMatcher_RestAPI.Model
         public bool status { get; set; } //ofline-online status
         public int level { get; set; } //player's level
         public double kdRatio { get; set; } //kill-death ratio
-        //public string character { get; set;  } //warriors??
         public string email { get; set; }
         public string password { get; set; }
 

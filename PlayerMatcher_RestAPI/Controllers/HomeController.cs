@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PlayerMatcher_RestAPI.Model;
+using System.Text.Json;
+
 
 namespace PlayerMatcher_RestAPI.Controllers
 {
@@ -10,17 +12,26 @@ namespace PlayerMatcher_RestAPI.Controllers
     public class HomeController : ControllerBase
     {
 
-        [HttpGet("signup")]
+        [HttpGet()]
+        public ActionResult<string> Test()
+        {
+            return Ok(new { message = "Matched User Name : masomo" });
+        }
+
+        [HttpPost("signup")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<string> SignUp(string email,string password,string username)
+        public ActionResult<string> SignUp(Account account)
         {
-            if(email== null || password == null || username == null || !CheckInputs(email,password,username))
+            if(account.userName == null || account.password == null || account.userName == null || !CheckInputs(account.email,
+                account.password, account.userName))
             {
                 return BadRequest();
             }
             var uuid = Guid.NewGuid();
-            var account = new Account(uuid, email, password,username);
+
+            account.id = uuid;
+            //var account = new Account(uuid, email, password,username);
             var dbFeedback = DatabaseOperations.shared.SaveAccountToDB(account);
 
             if (dbFeedback == "true")
