@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PlayerMatcher_RestAPI.Model;
@@ -14,15 +15,17 @@ namespace PlayerMatcher_RestAPI.Controllers
         [HttpGet()] //Test-Method..
         public ActionResult<string> Test()
         {
+
             return Ok(new { message = "Matched User Name : masomo" });
         }
 
         [HttpPost("signup")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<string> SignUp(Account account)
+        public ActionResult<string> SignUp()
         {
-            if(account.userName == null || account.password == null || account.userName == null || !CheckInputs(account.email,
+            /*
+            if (account.userName == null || account.password == null || account.userName == null || !CheckInputs(account.email,
                 account.password, account.userName))
             {
                 return BadRequest();
@@ -42,6 +45,7 @@ namespace PlayerMatcher_RestAPI.Controllers
                 return Problem(title: "Girdiginiz bilgiler veri tabanında yer almaktadır, lutfen bilgilerinizi kontrol ediniz");
             else
                 return Problem(title: "Sunucuda bir hata meydana geldi");
+            */
 
         }
 
