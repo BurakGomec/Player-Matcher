@@ -22,9 +22,9 @@ namespace PlayerMatcher_RestAPI.Controllers
         [HttpPost("signup")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<string> SignUp(Account account)
+        public ActionResult<string> SignUp()
         {
-            
+            /*
             if (account.userName == null || account.password == null || account.userName == null || !CheckInputs(account.email,
                 account.password, account.userName))
             {
@@ -45,7 +45,7 @@ namespace PlayerMatcher_RestAPI.Controllers
                 return Problem(title: "Girdiginiz bilgiler veri tabanında yer almaktadır, lutfen bilgilerinizi kontrol ediniz");
             else
                 return Problem(title: "Sunucuda bir hata meydana geldi");
-            
+            */
 
         }
 

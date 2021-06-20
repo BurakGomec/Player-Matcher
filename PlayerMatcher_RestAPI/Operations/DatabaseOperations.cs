@@ -2,8 +2,6 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using PlayerMatcher_RestAPI.Model;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace PlayerMatcher_RestAPI.Controllers
 {
@@ -36,18 +34,16 @@ namespace PlayerMatcher_RestAPI.Controllers
                 var db = client.GetDatabase("Store");
                 var collection = db.GetCollection<Account>("Accounts");
                 //var firstDocument = collection.Find(new BsonDocument()).FirstOrDefault();
-
                 if (DuplicatedDataControl(account))//Kullanıcıdan alınan bilgiler veritabanındaki bilgilerden eşsiz ise hesap kayıt işlemi yapılıyor
                 {
-                    account.password = EncryptingPassword(account.password);
                     collection.InsertOne(account);
-
                     return "true";
                 }
                 else
                 {
                     return "false";
                 }
+
             }
             catch(Exception)
             {
@@ -62,9 +58,7 @@ namespace PlayerMatcher_RestAPI.Controllers
             {
                 var db = client.GetDatabase("Store"); 
                 var collection = db.GetCollection<Player>("Players");
-                var player = new Player(account.id,account.userName, true, 1, 0);
-
-                collection.InsertOne(player);
+                Player player = new Player(account.id,account.userName, true, 1,0);
             }
             catch
             {
@@ -80,7 +74,6 @@ namespace PlayerMatcher_RestAPI.Controllers
                 var db = client.GetDatabase("Store");
                 var collection = db.GetCollection<Account>("Account");
                 var allDocuments = collection.Find(new BsonDocument()).ToList();
-
                 foreach (var element in allDocuments)
                 {
                     if(element.email == account.email || element.userName == account.userName)
@@ -94,24 +87,6 @@ namespace PlayerMatcher_RestAPI.Controllers
                 return false;
             }
             return true;
-        }
-
-        //kullanıcının girdiği parola veritabanına kaydedilmeden önce şifrelenir
-        private string EncryptingPassword(string password)
-        {
-            using (var sha256Hash = SHA256.Create())
-            {
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
-
-                var builder = new StringBuilder();
-
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-
-                return builder.ToString();
-            }
         }
 
         private DatabaseOperations(){}
