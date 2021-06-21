@@ -6,10 +6,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using PlayerMatcher_RestAPI.Model;
 using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace PlayerMatcher_RestAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class GameSceneController : ControllerBase
     {
@@ -36,15 +37,17 @@ namespace PlayerMatcher_RestAPI.Controllers
             var db = DatabaseOperations.shared.client.GetDatabase("Store");
             var players = db.GetCollection<Player>("Players");
 
-            var filter = Builders<Player>.Filter.Empty;
-            var playerList = players.Find(filter).ToList();
+            //var filter = Builders<Player>.Filter.Empty;
+            //var playerList = players.Find(filter).ToList();
+
+            var allDocuments = players.Find(new BsonDocument()).ToList();
 
             var levels = new List<double>();
             var kdRatious = new List<double>();
             #endregion
 
             #region normalizasyon
-            foreach (var player in playerList)
+            foreach (var player in allDocuments)
             {
                 levels.Add(player.level);
                 kdRatious.Add(player.kdRatio);
@@ -53,10 +56,10 @@ namespace PlayerMatcher_RestAPI.Controllers
             //listelerin min-max değerleri alınır
             double minLevel = levels.Min(), maxLevel = levels.Max(), minKD = kdRatious.Min(), maxKD = kdRatious.Max();
 
-            foreach (var player in playerList)
+            foreach (var player in allDocuments)
             {
-                player.level = player.level - minLevel / maxLevel-minLevel;
-                player.kdRatio = player.kdRatio - minKD / maxKD - minKD;
+                player.level = (player.level - minLevel) / (maxLevel-minLevel);
+                player.kdRatio = (player.kdRatio - minKD) / (maxKD - minKD); 
             }
             #endregion
 
@@ -64,7 +67,7 @@ namespace PlayerMatcher_RestAPI.Controllers
             //oyuncuların id leri ile öklid uzaklıkları hash lenir
             var euclideanDistances = new Dictionary<Guid, double>();
 
-            foreach (var player in playerList)
+            foreach (var player in allDocuments)
             {
                 if(player.id != player1.id)
                 {
@@ -75,10 +78,10 @@ namespace PlayerMatcher_RestAPI.Controllers
             }
 
             //uzaklıklar azalan bir şekilde sıralanırlar
-            euclideanDistances.OrderByDescending(x => x.Value);
+            euclideanDistances = euclideanDistances.OrderByDescending(x => x.Value).ToDictionary(y => y.Key, z => z.Value);
 
             //0. index de ki id ye sahip olan player2 bulunur
-            Player player2 = playerList.Find(x => x.id == euclideanDistances.ElementAt(0).Key);
+            Player player2 = allDocuments.Find(x => x.id == euclideanDistances.ElementAt(0).Key);
             #endregion
 
             return player2;

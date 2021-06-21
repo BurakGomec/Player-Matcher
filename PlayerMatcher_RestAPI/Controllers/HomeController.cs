@@ -48,7 +48,7 @@ namespace PlayerMatcher_RestAPI.Controllers
                 return BadRequest();
 
             Account account = new Account(Guid.NewGuid(), acc.email,acc.password,acc.username);
-            if (DatabaseOperations.shared.CheckAccountFromDB(account))
+            if (DatabaseOperations.shared.CheckAccountFromDB(account)) 
             {
                 return Ok(new { title = "Basari ile giris yaptiniz" });
             }

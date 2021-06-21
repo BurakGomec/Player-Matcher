@@ -38,6 +38,11 @@ namespace PlayerMatcher_RestAPI.Controllers
             return false;
         }
 
+        public void SetPlayerStatus()
+        {
+            ///
+        }
+
         public string SaveAccountToDB(Account account)
         {
             try

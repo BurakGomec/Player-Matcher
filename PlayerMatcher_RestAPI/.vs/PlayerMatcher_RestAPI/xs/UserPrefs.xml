@@ -2,8 +2,9 @@
   <MonoDevelop.Ide.ItemProperties.PlayerMatcher__RestAPI PreferredExecutionTarget="/Applications/Google Chrome.app" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/HomeController.cs">
     <Files>
-      <File FileName="Controllers/HomeController.cs" Line="25" Column="45" />
-      <File FileName="Operations/DatabaseOperations.cs" Line="27" Column="26" />
+      <File FileName="Controllers/HomeController.cs" Line="72" Column="10" />
+      <File FileName="Operations/DatabaseOperations.cs" Line="57" Column="18" />
+      <File FileName="Controllers/GameSceneController.cs" Line="43" Column="22" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
