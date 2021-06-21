@@ -7,7 +7,7 @@ namespace PlayerMatcher_RestAPI.Model
         public Guid id { get; set; } //Unique id-with same account's id 
         public string userName { get; set; } //Unique userName
         public bool status { get; set; } //Offline-online status
-        public int level { get; set; } //Player's level
+        public double level { get; set; } //Player's level
         public double kdRatio { get; set; } //Kill-death ratio
 
         public Player(Guid id, string userName, bool status, int level, double kdRatio)
