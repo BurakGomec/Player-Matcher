@@ -1,9 +1,7 @@
 ﻿using System;
-using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PlayerMatcher_RestAPI.Model;
-
 
 namespace PlayerMatcher_RestAPI.Controllers
 {
@@ -15,26 +13,20 @@ namespace PlayerMatcher_RestAPI.Controllers
         [HttpGet()] //Test-Method..
         public ActionResult<string> Test()
         {
-
             return Ok(new { message = "Matched User Name : masomo" });
         }
 
         [HttpPost("signup")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<string> SignUp()
+        public ActionResult<string> SignUp([FromBody] Account acc)
         {
-            /*
-            if (account.userName == null || account.password == null || account.userName == null || !CheckInputs(account.email,
-                account.password, account.userName))
-            {
-                return BadRequest();
-            }
-            var uuid = Guid.NewGuid();
-            account.id = uuid;
-            //var account = new Account(uuid, email, password,username);
-            var dbFeedback = DatabaseOperations.shared.SaveAccountToDB(account);
+            if (ReferenceEquals(acc.email, null) || ReferenceEquals(acc.password, null) || ReferenceEquals(acc.username, null) || acc.password.Length < 6)
+                   return BadRequest();
 
+            var uuid = Guid.NewGuid();
+            var account = new Account(uuid, acc.email, acc.password, acc.username);
+            var dbFeedback = DatabaseOperations.shared.SaveAccountToDB(account);
             if (dbFeedback == "true") 
             {
                 if(DatabaseOperations.shared.SavePlayerToDB(account)) //Kullanıcı sisteme kayıt oldu ise kullanıcıya bir oyuncu hesabı oluşturulup veri tabanına kayıt ediliyor
@@ -45,33 +37,26 @@ namespace PlayerMatcher_RestAPI.Controllers
                 return Problem(title: "Girdiginiz bilgiler veri tabanında yer almaktadır, lutfen bilgilerinizi kontrol ediniz");
             else
                 return Problem(title: "Sunucuda bir hata meydana geldi");
-            */
 
-        }
-
-        private bool CheckInputs(string email, string password, string username)
-        {
-            if (email.Equals("") || password.Equals("") || password.Length < 6 || username.Equals("") || email == null || password == null || username == null)
-                return false;
-            return true;
         }
 
         [HttpPost("signin")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<string> SignIn()
+        public ActionResult<string> SignIn([FromBody] Account acc)
         {
-            Account account = new Account(Guid.NewGuid(), "3123", "32131","312"); //dummy data
+            if (ReferenceEquals(acc.email, null) || ReferenceEquals(acc.password, null) || ReferenceEquals(acc.username, null) || acc.password.Length < 6)
+                return BadRequest();
+
+            Account account = new Account(Guid.NewGuid(), acc.email,acc.password,acc.username);
             if (DatabaseOperations.shared.CheckAccountFromDB(account))
             {
                 return Ok(new { title = "Basari ile giris yaptiniz" });
             }
             else
             {
-                return BadRequest(); //?
+                return Problem(title: "Girdiginiz bilgiler hatalidir"); 
             }
         }
-
-
         [HttpGet("match")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -80,6 +65,13 @@ namespace PlayerMatcher_RestAPI.Controllers
             return true;
         }
 
+        [HttpPut("update")] 
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public ActionResult<bool> UpdateUserInfo()
+        {
+            return true;
+        }
     }
 }
 
