@@ -27,11 +27,13 @@ namespace PlayerMatcher_RestAPI.Controllers
             var uuid = Guid.NewGuid();
             var account = new Account(uuid, acc.email, acc.password, acc.username);
             var dbFeedback = DatabaseOperations.shared.SaveAccountToDB(account);
+
             if (dbFeedback == "true") 
             {
                 if(DatabaseOperations.shared.SavePlayerToDB(account)) //Kullanıcı sisteme kayıt oldu ise kullanıcıya bir oyuncu hesabı oluşturulup veri tabanına kayıt ediliyor
                     return Ok(new { title = "Hesap basariyla olusturuldu" });
-                else return Problem(title: "Hesabınız yaratılırken bir hata meydana geldi");
+                else 
+                    return Problem(title: "Hesabınız yaratılırken bir hata meydana geldi");
             }
             else if(dbFeedback == "false")
                 return Problem(title: "Girdiginiz bilgiler veri tabanında yer almaktadır, lutfen bilgilerinizi kontrol ediniz");
@@ -57,6 +59,7 @@ namespace PlayerMatcher_RestAPI.Controllers
                 return Problem(title: "Girdiginiz bilgiler hatalidir"); 
             }
         }
+
         [HttpGet("match")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -78,7 +81,7 @@ namespace PlayerMatcher_RestAPI.Controllers
             if (DatabaseOperations.shared.CheckAccountFromDB(account))
             {
                 account.username = userName;
-                if (DatabaseOperations.shared.UpdateUsernameToDB(account))
+                if (DatabaseOperations.shared.UpdateUsername(account))
                 {
                     return Ok( new { title = " Kullanıcı adı güncelleme işlemi başarılı" } );
                 }

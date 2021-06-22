@@ -93,5 +93,27 @@ namespace PlayerMatcher_RestAPI.Controllers
 
             return player2;
         }
+
+        [HttpPut("levelup")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<Player> LevelUp([FromBody] Player player)
+        {
+            if (ReferenceEquals(player, null))
+            {
+                return BadRequest();
+            }
+
+            player.level += 1;
+
+            bool feedback = DatabaseOperations.shared.UpdatePlayerStats(player);
+
+            if(!feedback)
+            {
+                return Problem(title: "Oyuncu hesabi guncellenirken bir sorun olustu");
+            }
+
+            return Ok(player);
+        }
     }
 }

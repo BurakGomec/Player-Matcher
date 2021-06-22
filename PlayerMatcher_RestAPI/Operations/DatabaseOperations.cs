@@ -11,7 +11,7 @@ namespace PlayerMatcher_RestAPI.Controllers
     {  
         public static DatabaseOperations shared = new DatabaseOperations();
 
-        private MongoClient client = new MongoClient(Constant.Constants.connectionInfo);
+        public MongoClient client = new MongoClient(Constant.Constants.connectionInfo);
 
         public bool CheckAccountFromDB(Account account) //Kullanıcıdan gelen giriş yap isteğindeki verileri veri tabanındaki veriler ile karşılaştırıp bool döönen metot
         {
@@ -21,6 +21,7 @@ namespace PlayerMatcher_RestAPI.Controllers
                 var collection = db.GetCollection<Account>("Accounts"); //MongoDB içerisinde yer alan "accounts" koleksiyonu alınıyor
                 var allDocuments = collection.Find(new BsonDocument()).ToList(); //Koleksiyon içersinde yer alan tüm dökümanlar kullanılmak üzere list tipine çeviriliyor
                 var encryptedPassword = EncryptingPassword(account.password);
+
                 foreach (var element in allDocuments)
                 {
                     if (element.email == account.email && element.username == account.username && element.password == encryptedPassword)
@@ -81,13 +82,34 @@ namespace PlayerMatcher_RestAPI.Controllers
             return true;
         }
 
-        public bool UpdateUsernameToDB(Account account)
+        public bool UpdateUsername(Account account)
         {
             try
             {
                 var db = client.GetDatabase("Store");
                 var collection = db.GetCollection<Player>("Players");
                 collection.UpdateOne(account);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        //player sınıfının güncelleştirilebilen tüm alanları için tek bir metod;
+        public bool UpdatePlayerStats(Player player)
+        {
+            try
+            {
+                var db = client.GetDatabase("Store");
+                var collection = db.GetCollection<Player>("Players");
+                var filter = Builders<Player>.Filter.Eq(x => x.id, player.id);
+                var update = Builders<Player>.Update.Set(x => x, player);
+
+                collection.FindOneAndUpdate(filter, update);
+
                 return true;
             }
             catch

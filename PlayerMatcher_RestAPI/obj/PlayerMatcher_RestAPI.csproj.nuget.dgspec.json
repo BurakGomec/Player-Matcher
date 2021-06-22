@@ -1,20 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Alice\\Documents\\GitHub\\Player-Matcher\\PlayerMatcher_RestAPI\\PlayerMatcher_RestAPI.csproj": {}
+    "D:\\GitHub2021\\Player-Matcher\\PlayerMatcher_RestAPI\\PlayerMatcher_RestAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Alice\\Documents\\GitHub\\Player-Matcher\\PlayerMatcher_RestAPI\\PlayerMatcher_RestAPI.csproj": {
+    "D:\\GitHub2021\\Player-Matcher\\PlayerMatcher_RestAPI\\PlayerMatcher_RestAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Alice\\Documents\\GitHub\\Player-Matcher\\PlayerMatcher_RestAPI\\PlayerMatcher_RestAPI.csproj",
+        "projectUniqueName": "D:\\GitHub2021\\Player-Matcher\\PlayerMatcher_RestAPI\\PlayerMatcher_RestAPI.csproj",
         "projectName": "PlayerMatcher_RestAPI",
-        "projectPath": "C:\\Users\\Alice\\Documents\\GitHub\\Player-Matcher\\PlayerMatcher_RestAPI\\PlayerMatcher_RestAPI.csproj",
-        "packagesPath": "C:\\Users\\Alice\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Alice\\Documents\\GitHub\\Player-Matcher\\PlayerMatcher_RestAPI\\obj\\",
+        "projectPath": "D:\\GitHub2021\\Player-Matcher\\PlayerMatcher_RestAPI\\PlayerMatcher_RestAPI.csproj",
+        "packagesPath": "C:\\Users\\mrter\\.nuget\\packages\\",
+        "outputPath": "D:\\GitHub2021\\Player-Matcher\\PlayerMatcher_RestAPI\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Alice\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mrter\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -75,7 +78,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }
