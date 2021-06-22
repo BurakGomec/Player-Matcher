@@ -46,7 +46,6 @@ namespace PlayerMatcher_RestAPI.Controllers
                 var collection = db.GetCollection<Account>("Accounts");
                 var password = EncryptingPassword(account.password);
                 account.password = password;
-                //var firstDocument = collection.Find(new BsonDocument()).FirstOrDefault();
 
                 if (DuplicatedDataControl(account))//Kullanıcıdan alınan bilgiler veritabanındaki bilgilerden eşsiz ise hesap kayıt işlemi yapılıyor
                 {
@@ -106,18 +105,21 @@ namespace PlayerMatcher_RestAPI.Controllers
         {
             try
             {
+ 
                 var db = client.GetDatabase("Store");
                 var collection = db.GetCollection<Player>("Players");
 
                 var filter = Builders<Player>.Filter.Eq(x => x.id, player.id);
-                var update = Builders<Player>.Update.Set(x => x, player);
+    
+                var update = Builders<Player>.Update.Set(x => x.level, player.level);
 
                 collection.FindOneAndUpdate(filter, update);
-
+   
                 return true;
             }
-            catch
+            catch(Exception e)
             {
+                Console.WriteLine(e.ToString()); 
                 return false;
             }
         }
@@ -126,9 +128,9 @@ namespace PlayerMatcher_RestAPI.Controllers
         {
             var db = client.GetDatabase("Store");
             var collection = db.GetCollection<Player>("Players");
-
-            Player player = (Player)collection.Find(x => x.username == username);
-
+            List<Player> players = collection.Find(new BsonDocument()).ToList();
+   
+            Player player = players.Find(x => x.username == username);
             return player;
         }
 
@@ -149,7 +151,6 @@ namespace PlayerMatcher_RestAPI.Controllers
                 var db = client.GetDatabase("Store");
                 var collection = db.GetCollection<Account>("Accounts");
                 var allDocuments = collection.Find(new BsonDocument()).ToList();
-
                 foreach (var element in allDocuments)
                 {
                     if(element.email == account.email || element.username == account.username)

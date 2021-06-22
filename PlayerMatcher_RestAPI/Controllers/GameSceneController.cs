@@ -94,8 +94,9 @@ namespace PlayerMatcher_RestAPI.Controllers
         [HttpPatch("levelup")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<Player> LevelUp([FromBody] Player player)
+        public ActionResult<Player> LevelUp(string username)
         {
+            Player player = DatabaseOperations.shared.FindPlayer(username);
             if (ReferenceEquals(player, null))
             {
                 return BadRequest();

@@ -10,12 +10,6 @@ namespace PlayerMatcher_RestAPI.Controllers
     public class AuthController : ControllerBase
     {
 
-        [HttpGet()] //Test-Method..
-        public ActionResult<string> Test()
-        {
-            return Ok(new { message = "Matched User Name : masomo" });
-        }
-
         [HttpPost("signup")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -93,6 +87,51 @@ namespace PlayerMatcher_RestAPI.Controllers
 
             return true;
         }
+
+
+
+        [HttpPost("logout")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public ActionResult<string> LogOut([FromBody]string username)   
+        {
+            if (ReferenceEquals(username, null))
+                return BadRequest();
+
+    
+
+            var player = DatabaseOperations.shared.FindPlayer(username);
+            if (ReferenceEquals(player, null))
+                return NotFound();
+            player.status = false;
+            var control = DatabaseOperations.shared.UpdatePlayerStats(player);
+            if (!control)
+            {
+                return Problem(title: "Çıkış yapılırken bir hata meydana geldi");
+            }
+
+            return Ok();
+        }
+
+        [HttpGet("level")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public ActionResult<bool> IncreaseUserLevel()
+        {
+            return true;
+        }
+
+
+        [HttpDelete("delete")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public ActionResult<bool> DeleteUser()
+        {
+            return true;
+        }
+
+
     }
 }
 
