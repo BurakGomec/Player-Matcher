@@ -7,7 +7,7 @@ namespace PlayerMatcher_RestAPI.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class HomeController : ControllerBase
+    public class AuthController : ControllerBase
     {
 
         [HttpGet()] //Test-Method..

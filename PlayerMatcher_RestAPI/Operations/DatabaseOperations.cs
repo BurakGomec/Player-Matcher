@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using MongoDB.Bson;
@@ -86,9 +87,11 @@ namespace PlayerMatcher_RestAPI.Controllers
         {
             try
             {
+                /*
                 var db = client.GetDatabase("Store");
                 var collection = db.GetCollection<Player>("Players");
                 collection.UpdateOne(account);
+                */
 
                 return true;
             }
@@ -105,6 +108,7 @@ namespace PlayerMatcher_RestAPI.Controllers
             {
                 var db = client.GetDatabase("Store");
                 var collection = db.GetCollection<Player>("Players");
+
                 var filter = Builders<Player>.Filter.Eq(x => x.id, player.id);
                 var update = Builders<Player>.Update.Set(x => x, player);
 
@@ -116,6 +120,26 @@ namespace PlayerMatcher_RestAPI.Controllers
             {
                 return false;
             }
+        }
+
+        public Player FindPlayer(string username)
+        {
+            var db = client.GetDatabase("Store");
+            var collection = db.GetCollection<Player>("Players");
+
+            Player player = (Player)collection.Find(x => x.username == username);
+
+            return player;
+        }
+
+        public List<Player> GetAllPlayers()
+        {
+            var db = client.GetDatabase("Store");
+            var collection = db.GetCollection<Player>("Players");
+
+            List<Player> players = collection.Find(new BsonDocument()).ToList();
+
+            return players;
         }
 
         private bool DuplicatedDataControl(Account account) //Kullanıcıdan gelen kayıt ol isteğinde alınan e-posta, kullanıcı adı bilgilerin veri tabanında yer alıp almadığını kontrol eden metot

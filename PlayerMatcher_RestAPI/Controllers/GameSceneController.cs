@@ -17,30 +17,27 @@ namespace PlayerMatcher_RestAPI.Controllers
         //gönderilen oyuncuya en benzeyen oyuncuyu geri döndüren metod 
         [HttpGet("matchmaking")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<Player> FindOpponent([FromBody] Player player1)
+        public ActionResult<Player> FindOpponent(string username)
         {
-            if(ReferenceEquals(player1, null))
+            if(ReferenceEquals(username, null))
             {
                 return BadRequest();
             }
 
-            Player player2 = FindSimilarPlayer(player1);
+            Player player2 = FindSimilarPlayer(username);
 
             return Ok(player2);
         }
 
         //kNN with Euclidean Distance
-        private Player FindSimilarPlayer(Player player1)
+        private Player FindSimilarPlayer(string username)
         {
             #region data importing
-            var db = DatabaseOperations.shared.client.GetDatabase("Store");
-            var players = db.GetCollection<Player>("Players");
+            Player player1 = DatabaseOperations.shared.FindPlayer(username);
 
-            //var filter = Builders<Player>.Filter.Empty;
-            //var playerList = players.Find(filter).ToList();
-
-            var allPlayers = players.Find(new BsonDocument()).ToList();
+            var allPlayers = DatabaseOperations.shared.GetAllPlayers();
 
             var ids = new List<Guid>();
             var levels = new List<double>();
@@ -94,7 +91,7 @@ namespace PlayerMatcher_RestAPI.Controllers
             return player2;
         }
 
-        [HttpPut("levelup")]
+        [HttpPatch("levelup")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<Player> LevelUp([FromBody] Player player)
