@@ -76,3 +76,10 @@ D:\GitHub2021\Player-Matcher\PlayerMatcher_RestAPI\obj\Debug\netcoreapp3.1\Playe
 D:\GitHub2021\Player-Matcher\PlayerMatcher_RestAPI\obj\Debug\netcoreapp3.1\PlayerMatcher_RestAPI.dll
 D:\GitHub2021\Player-Matcher\PlayerMatcher_RestAPI\obj\Debug\netcoreapp3.1\PlayerMatcher_RestAPI.pdb
 D:\GitHub2021\Player-Matcher\PlayerMatcher_RestAPI\obj\Debug\netcoreapp3.1\PlayerMatcher_RestAPI.genruntimeconfig.cache
+C:\Users\Alice\Documents\GitHub\Player-Matcher\PlayerMatcher_RestAPI\obj\Debug\netcoreapp3.1\PlayerMatcher_RestAPI.csprojAssemblyReference.cache
+C:\Users\Alice\Documents\GitHub\Player-Matcher\PlayerMatcher_RestAPI\obj\Debug\netcoreapp3.1\PlayerMatcher_RestAPI.AssemblyInfoInputs.cache
+C:\Users\Alice\Documents\GitHub\Player-Matcher\PlayerMatcher_RestAPI\obj\Debug\netcoreapp3.1\PlayerMatcher_RestAPI.AssemblyInfo.cs
+C:\Users\Alice\Documents\GitHub\Player-Matcher\PlayerMatcher_RestAPI\obj\Debug\netcoreapp3.1\PlayerMatcher_RestAPI.csproj.CoreCompileInputs.cache
+C:\Users\Alice\Documents\GitHub\Player-Matcher\PlayerMatcher_RestAPI\obj\Debug\netcoreapp3.1\PlayerMatcher_RestAPI.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Alice\Documents\GitHub\Player-Matcher\PlayerMatcher_RestAPI\obj\Debug\netcoreapp3.1\PlayerMatcher_RestAPI.dll
+C:\Users\Alice\Documents\GitHub\Player-Matcher\PlayerMatcher_RestAPI\obj\Debug\netcoreapp3.1\PlayerMatcher_RestAPI.pdb
