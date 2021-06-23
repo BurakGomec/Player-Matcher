@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using PlayerMatcher_RestAPI.Model;
@@ -25,6 +26,7 @@ namespace PlayerMatcher_RestAPI.Controllers
 
                 foreach (var element in allDocuments)
                 {
+                    Console.WriteLine("DEBUG: encrypted: " + encryptedPassword + "DB:" +element.password);
                     if (element.email == account.email && element.username == account.username && element.password == encryptedPassword)
                     {
                         return true;
@@ -105,7 +107,6 @@ namespace PlayerMatcher_RestAPI.Controllers
         {
             try
             {
- 
                 var db = client.GetDatabase("Store");
                 var collection = db.GetCollection<Player>("Players");
 
@@ -157,7 +158,7 @@ namespace PlayerMatcher_RestAPI.Controllers
                     {
                         return false;
                     }
-                }
+                }   
             }
             catch
             {
@@ -183,6 +184,18 @@ namespace PlayerMatcher_RestAPI.Controllers
                 return builder.ToString();
             }
         }
+
+
+        public bool CheckEmail(string email)
+        {
+            Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            Match match = regex.Match(email);
+            if (match.Success)
+                return false;
+            else
+                return true;
+        }
+
 
 
         private DatabaseOperations(){}

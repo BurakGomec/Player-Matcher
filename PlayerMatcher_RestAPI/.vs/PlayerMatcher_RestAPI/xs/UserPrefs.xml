@@ -1,23 +1,23 @@
 ﻿<Properties StartupConfiguration="{FB5E6855-CA70-465E-9DEF-2692C22DADD8}|Default">
   <MonoDevelop.Ide.ItemProperties.PlayerMatcher__RestAPI PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Operations/DatabaseOperations.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/GameSceneController.cs">
     <Files>
-      <File FileName="Operations/DatabaseOperations.cs" Line="162" Column="18" />
-      <File FileName="Controllers/GameSceneController.cs" Line="111" Column="85" />
-      <File FileName="Controllers/AuthController.cs" Line="108" Column="79" />
+      <File FileName="Operations/DatabaseOperations.cs" Line="195" Column="28" />
+      <File FileName="Controllers/AuthController.cs" Line="161" Column="2" />
+      <File FileName="Controllers/GameSceneController.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="PlayerMatcher_RestAPI" expanded="True">
             <Node name="PlayerMatcher_RestAPI" expanded="True">
-              <Node name="Dependencies" expanded="True" />
               <Node name="ConstantVariable" expanded="True" />
-              <Node name="Controllers" expanded="True" />
-              <Node name="Model" expanded="True" />
-              <Node name="Operations" expanded="True">
-                <Node name="DatabaseOperations.cs" selected="True" />
+              <Node name="Controllers" expanded="True">
+                <Node name="GameSceneController.cs" selected="True" />
               </Node>
+              <Node name="Core" expanded="True" />
+              <Node name="Model" expanded="True" />
+              <Node name="Operations" expanded="True" />
               <Node name="Properties" expanded="True" />
             </Node>
           </Node>
