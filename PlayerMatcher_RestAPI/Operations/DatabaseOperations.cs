@@ -21,7 +21,7 @@ namespace PlayerMatcher_RestAPI.Controllers
                 var db = client.GetDatabase("Store"); //MongoDB içerisinde yer alan "store" isimli veri tabanı alınıyor
                 var collection = db.GetCollection<Account>("Accounts"); //MongoDB içerisinde yer alan "accounts" koleksiyonu alınıyor
                 var allDocuments = collection.Find(new BsonDocument()).ToList(); //Koleksiyon içersinde yer alan tüm dökümanlar kullanılmak üzere list tipine çeviriliyor
-                var encryptedPassword = EncryptingPassword(account.password);
+                var encryptedPassword = Encypting(account.password);
 
                 foreach (var element in allDocuments)
                 {
@@ -44,12 +44,12 @@ namespace PlayerMatcher_RestAPI.Controllers
             {
                 var db = client.GetDatabase("Store");
                 var collection = db.GetCollection<Account>("Accounts");
-                var password = EncryptingPassword(account.password);
+                var password = Encypting(account.password);
                 account.password = password;
 
                 if (DuplicatedDataControl(account))//Kullanıcıdan alınan bilgiler veritabanındaki bilgilerden eşsiz ise hesap kayıt işlemi yapılıyor
                 {
-                    account.password = EncryptingPassword(account.password);
+                    account.password = Encypting(account.password);
                     collection.InsertOne(account);
 
                     return "true";
@@ -167,11 +167,11 @@ namespace PlayerMatcher_RestAPI.Controllers
         }
 
         //Kullanıcının girdiği parolanın veritabanına kaydedilmeden önce şifrelendiği metot
-        private string EncryptingPassword(string password)
+        public string Encypting(string input)
         {
             using (var sha256Hash = SHA256.Create())
             {
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
 
                 var builder = new StringBuilder();
 

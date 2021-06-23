@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PlayerMatcher_RestAPI.Model;
+using System.Linq;
 
 namespace PlayerMatcher_RestAPI.Controllers
 {
@@ -9,8 +11,10 @@ namespace PlayerMatcher_RestAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        public static Dictionary<Guid, string> tokens = new Dictionary<Guid, string>();
 
         [HttpPost("signup")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<string> SignUp([FromBody] Account acc)
@@ -20,20 +24,26 @@ namespace PlayerMatcher_RestAPI.Controllers
 
             var uuid = Guid.NewGuid();
             var account = new Account(uuid, acc.email, acc.password, acc.username);
-            var dbFeedback = DatabaseOperations.shared.SaveAccountToDB(account);
+            string dbFeedback = DatabaseOperations.shared.SaveAccountToDB(account);
 
-            if (dbFeedback == "true") 
+            if (dbFeedback.Equals("false")) 
+                return Problem(title: "Girdiginiz bilgiler veri tabanında yer almaktadır, lutfen bilgilerinizi kontrol ediniz");                    
+
+            if(dbFeedback.Equals("error"))
+                return Problem(title: "Kullanici hesabiniz yaratılırken bir hata meydana geldi");
+
+            //Kullanıcı sisteme kayıt oldu ise kullanıcıya bir oyuncu hesabı oluşturulup veri tabanına kayıt ediliyor
+            bool feedback = DatabaseOperations.shared.SavePlayerToDB(account);
+
+            if(!feedback)
             {
-                if(DatabaseOperations.shared.SavePlayerToDB(account)) //Kullanıcı sisteme kayıt oldu ise kullanıcıya bir oyuncu hesabı oluşturulup veri tabanına kayıt ediliyor
-                    return Ok(new { title = "Hesap basariyla olusturuldu" });
-                else 
-                    return Problem(title: "Hesabınız yaratılırken bir hata meydana geldi");
+                return Problem(title: "Oyuncu hesabınız yaratılırken bir hata meydana geldi");
             }
-            else if(dbFeedback == "false")
-                return Problem(title: "Girdiginiz bilgiler veri tabanında yer almaktadır, lutfen bilgilerinizi kontrol ediniz");
-            else
-                return Problem(title: "Sunucuda bir hata meydana geldi");
 
+            string token = DatabaseOperations.shared.Encypting(acc.username);
+            tokens.Add(acc.id, token);
+
+            return Ok(new { title = "Hesap basariyla olusturuldu" });
         }
 
         [HttpPost("signin")]
@@ -91,25 +101,35 @@ namespace PlayerMatcher_RestAPI.Controllers
 
 
         [HttpPost("logout")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public ActionResult<string> LogOut([FromBody]string username)   
+        public ActionResult<string> LogOut([FromBody]string username, string token)   
         {
+            
+
             if (ReferenceEquals(username, null))
                 return BadRequest();
-
-    
-
+  
             var player = DatabaseOperations.shared.FindPlayer(username);
+
             if (ReferenceEquals(player, null))
                 return NotFound();
-            player.status = false;
+
+            if (!tokens.Any(x => x.Key == player.id && x.Value == token))
+                return Unauthorized();
+
+
+
+                player.status = false;
             var control = DatabaseOperations.shared.UpdatePlayerStats(player);
+
             if (!control)
-            {
                 return Problem(title: "Çıkış yapılırken bir hata meydana geldi");
-            }
+
+            //player'ın id si ile eşleşen Guid-string'i siler;
+            tokens.Remove(player.id);
 
             return Ok();
         }
