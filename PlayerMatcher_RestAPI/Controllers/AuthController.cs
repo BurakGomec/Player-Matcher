@@ -87,32 +87,6 @@ namespace PlayerMatcher_RestAPI.Controllers
             }
         }
 
-        [HttpPut("update")] 
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public ActionResult<bool> UpdateUserInfo([FromBody] Account acc, string userName)
-        {
-            if (ReferenceEquals(acc.email, null) || ReferenceEquals(acc.password, null) || ReferenceEquals(acc.username, null) || acc.password.Length < 6)
-                return BadRequest();
-
-            Account account = new Account(Guid.NewGuid(), acc.email, acc.password, acc.username);
-
-            if (DatabaseOperations.shared.CheckAccountFromDB(account))
-            {
-                account.username = userName;
-                if (DatabaseOperations.shared.UpdateUsername(account))
-                {
-                    return Ok( new { title = " Kullanıcı adı güncelleme işlemi başarılı" } );
-                }
-            }
-            else
-            {
-                return Problem(title: "Girdiginiz bilgiler hatalidir");
-            }
-
-            return true;
-        }
-
         [HttpPost("logout")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

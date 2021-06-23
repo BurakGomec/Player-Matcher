@@ -29,6 +29,14 @@ namespace PlayerMatcher_RestAPI.Controllers
                     Console.WriteLine("DEBUG: encrypted: " + encryptedPassword + "DB:" +element.password);
                     if (element.email == account.email && element.username == account.username && element.password == encryptedPassword)
                     {
+                        var playerCollection = db.GetCollection<Player>("Players");
+
+                        var filter = Builders<Player>.Filter.Eq(x => x.id, account.id);
+
+                        var update = Builders<Player>.Update.Set(x => x.status, true);
+
+                        playerCollection.FindOneAndUpdate(filter, update); ///status??
+                  
                         return true;
                     }
                 }
@@ -40,7 +48,7 @@ namespace PlayerMatcher_RestAPI.Controllers
             return false;
         }
 
-        public string SaveAccountToDB(Account account)
+        public string SaveAccountToDB(Account account)//Kullanıcının hesabını veritabanına kayıt eden metot
         {
             try
             {
@@ -83,27 +91,8 @@ namespace PlayerMatcher_RestAPI.Controllers
             }
             return true;
         }
-
-        public bool UpdateUsername(Account account)
-        {
-            try
-            {
-                /*
-                var db = client.GetDatabase("Store");
-                var collection = db.GetCollection<Player>("Players");
-                collection.UpdateOne(account);
-                */
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        //player sınıfının güncelleştirilebilen tüm alanları için tek bir metod;
-        public bool UpdatePlayerStats(Player player)
+       
+        public bool UpdatePlayerStats(Player player) //Oyuncunun bilgileri güncellenirken kullanılan metot
         {
             try
             {
@@ -125,7 +114,7 @@ namespace PlayerMatcher_RestAPI.Controllers
             }
         }
 
-        public Player FindPlayer(string username)
+        public Player FindPlayer(string username)//Aranan bir oyuncununun sunucuda yer alıp almadığını kontrol eden metot
         {
             var db = client.GetDatabase("Store");
             var collection = db.GetCollection<Player>("Players");
@@ -135,7 +124,7 @@ namespace PlayerMatcher_RestAPI.Controllers
             return player;
         }
 
-        public List<Player> GetAllPlayers()
+        public List<Player> GetAllPlayers()//Veritabanından tüm oyuncuları alıp liste tipinde geriye dönen metot
         {
             var db = client.GetDatabase("Store");
             var collection = db.GetCollection<Player>("Players");
@@ -186,7 +175,7 @@ namespace PlayerMatcher_RestAPI.Controllers
         }
 
 
-        public bool CheckEmail(string email)
+        public bool CheckEmail(string email)//Girilen e-postanın geçerli olup olmadığını kontrol eden metot
         {
             Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
             Match match = regex.Match(email);
