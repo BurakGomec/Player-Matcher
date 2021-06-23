@@ -21,7 +21,8 @@ namespace PlayerMatcher_RestAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<string> SignUp([FromBody] Account acc)
         {
-            if (ReferenceEquals(acc.email, null) || ReferenceEquals(acc.password, null) || ReferenceEquals(acc.username, null) || acc.password.Length < 6 || DatabaseOperations.shared.CheckEmail(acc.email))
+            if (ReferenceEquals(acc.email, null) || ReferenceEquals(acc.password, null) || ReferenceEquals(acc.username, null) 
+                || acc.password.Length < 6 || DatabaseOperations.shared.CheckEmail(acc.email))
                    return BadRequest();
 
             var uuid = Guid.NewGuid();
@@ -46,11 +47,13 @@ namespace PlayerMatcher_RestAPI.Controllers
             {
                 string token = DatabaseOperations.shared.Encypting(acc.username);
                 tokens.Add(acc.id, token);
+
                 return Ok(new { token = $"{token}" });
             }
             else
             {
                 string token = tokens[acc.id];
+
                 return Ok(new { token = $"{token}" });
             }
         }
@@ -64,7 +67,8 @@ namespace PlayerMatcher_RestAPI.Controllers
         public ActionResult<string> SignIn([FromBody] Account acc)
         {
             //girilen parametreler kontrol edilir
-            if (ReferenceEquals(acc.email, null) || ReferenceEquals(acc.password, null) || ReferenceEquals(acc.username, null) || acc.password.Length < 6 || DatabaseOperations.shared.CheckEmail(acc.email))
+            if (ReferenceEquals(acc.email, null) || ReferenceEquals(acc.password, null) || ReferenceEquals(acc.username, null)
+                || acc.password.Length < 6 || DatabaseOperations.shared.CheckEmail(acc.email))
                 return BadRequest();
 
             //girilen username'e göre veritabanından hesap alınır
@@ -99,9 +103,9 @@ namespace PlayerMatcher_RestAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<string> LogOut([FromBody] Dictionary<string, string> data)   
         {
-
             var username = data["username"];
             var token = data["token"];
 
@@ -132,19 +136,27 @@ namespace PlayerMatcher_RestAPI.Controllers
         }
 
 
-
+        //kullanıcının tüm hesaplarını siler (account/player)
         [HttpDelete("delete")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<bool> DeleteUser(string username, string token)
-        {
+        {            
+            var account = DatabaseOperations.shared.FindAccount(username);
+            var player = DatabaseOperations.shared.FindPlayer(username);
 
+            if (!token.Equals(tokens[account.id]))
+                return Unauthorized();
 
-            return true;
+            bool feedback = DatabaseOperations.shared.DeleteAccount(account, player);
+
+            if (!feedback)
+                return Problem(title: "Hesap silinirken bir hata olustu");
+
+                return Ok();
         }
-
-
     }
 }
 

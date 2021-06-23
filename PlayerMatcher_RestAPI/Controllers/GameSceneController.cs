@@ -28,6 +28,9 @@ namespace PlayerMatcher_RestAPI.Controllers
 
             Player player2 = FindSimilarPlayer(username);
 
+            if (ReferenceEquals(player2, null))
+                return NotFound();
+
             return Ok(player2);
         }
 
@@ -92,6 +95,7 @@ namespace PlayerMatcher_RestAPI.Controllers
         }
 
         [HttpPatch("levelup")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<Player> LevelUp(string username)

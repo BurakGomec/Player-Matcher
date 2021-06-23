@@ -2,6 +2,7 @@
 
 namespace PlayerMatcher_RestAPI.Model
 {
+    //kullanıcının authentication işlemlerinde kullanılan sınıf
     public class Account
     {        
         public Guid id { get; set; } //Unique id-with same player's id 

@@ -13,7 +13,6 @@ namespace PlayerMatcher_RestAPI.Controllers
     public class DatabaseOperations
     {  
         public static DatabaseOperations shared = new DatabaseOperations();
-
         public MongoClient client = new MongoClient(Constant.Constants.connectionInfo);
 
         public bool CheckAccountFromDB(Account account) //Kullanıcıdan gelen giriş yap isteğindeki verileri veri tabanındaki veriler ile karşılaştırıp bool döönen metot
@@ -131,33 +130,56 @@ namespace PlayerMatcher_RestAPI.Controllers
 
         public Player FindPlayer(string username)//Aranan bir oyuncununun sunucuda yer alıp almadığını kontrol eden metot
         {
-            var db = client.GetDatabase("Store");
-            var collection = db.GetCollection<Player>("Players");
-            List<Player> players = collection.Find(new BsonDocument()).ToList();
-   
-            Player player = players.Find(x => x.username == username);
-            return player;
+            try
+            {
+                var db = client.GetDatabase("Store");
+                var collection = db.GetCollection<Player>("Players");
+                List<Player> players = collection.Find(new BsonDocument()).ToList();
+
+                Player player = players.Find(x => x.username == username);
+
+                return player;
+            }
+            catch(Exception)
+            {
+                return null;
+            }            
         }
 
         public Account FindAccount(string username)//Aranan bir oyuncununun sunucuda yer alıp almadığını kontrol eden metot
         {
-            var db = client.GetDatabase("Store");
-            var collection = db.GetCollection<Account>("Accounts");
-            List<Account> accounts = collection.Find(new BsonDocument()).ToList();
+            try
+            {
+                var db = client.GetDatabase("Store");
+                var collection = db.GetCollection<Account>("Accounts");
+                List<Account> accounts = collection.Find(new BsonDocument()).ToList();
 
-            Account player = accounts.Find(x => x.username == username);
+                Account account = accounts.Find(x => x.username == username);
 
-            return player;
+                return account;
+            }
+            catch(Exception)
+            {
+                return null;
+            }
+            
         }
 
         public List<Player> GetAllPlayers()//Veritabanından tüm oyuncuları alıp liste tipinde geriye dönen metot
         {
-            var db = client.GetDatabase("Store");
-            var collection = db.GetCollection<Player>("Players");
+            try
+            {
+                var db = client.GetDatabase("Store");
+                var collection = db.GetCollection<Player>("Players");
 
-            List<Player> players = collection.Find(new BsonDocument()).ToList();
+                List<Player> players = collection.Find(new BsonDocument()).ToList();
 
-            return players;
+                return players;
+            }
+            catch(Exception)
+            {
+                return null;
+            }           
         }
 
         private bool DuplicatedDataControl(Account account) //Kullanıcıdan gelen kayıt ol isteğinde alınan e-posta, kullanıcı adı bilgilerin veri tabanında yer alıp almadığını kontrol eden metot
@@ -211,7 +233,30 @@ namespace PlayerMatcher_RestAPI.Controllers
                 return true;
         }
 
+        public bool DeleteAccount(Account account, Player player)
+        {
+            try
+            {
+                //account silme;
+                var db = client.GetDatabase("Store");
+                var collection = db.GetCollection<Account>("Accounts");
+                var filter = Builders<Account>.Filter.Eq(x => x.id, player.id);
 
+                collection.DeleteOne(filter);
+
+                //player silme;
+                var collection1 = db.GetCollection<Player>("Players");
+                var filter1 = Builders<Player>.Filter.Eq(x => x.id, player.id);
+
+                collection1.DeleteOne(filter1);
+
+                return true;
+            }
+            catch(Exception)
+            {
+                return false;
+            }          
+        }
 
         private DatabaseOperations(){}
        

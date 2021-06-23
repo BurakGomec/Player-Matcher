@@ -2,6 +2,7 @@
 
 namespace PlayerMatcher_RestAPI.Model
 {
+    //oyuncunun başka bir oyuncu ile eşleştirilmesi için gerekli bilgilerin tutulduğu sınıf
     public class Player
     {
         public Guid id { get; set; } //Unique id-with same account's id 
