@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -22,32 +23,23 @@ namespace PlayerMatcher_RestAPI.Controllers
                 var db = client.GetDatabase("Store"); //MongoDB içerisinde yer alan "store" isimli veri tabanı alınıyor
                 var collection = db.GetCollection<Account>("Accounts"); //MongoDB içerisinde yer alan "accounts" koleksiyonu alınıyor
                 var allDocuments = collection.Find(new BsonDocument()).ToList(); //Koleksiyon içersinde yer alan tüm dökümanlar kullanılmak üzere list tipine çeviriliyor
-                var encryptedPassword = Encypting(account.password);
 
-                foreach (var element in allDocuments)
+                if(allDocuments.Any(x => x.email == account.email && x.username == account.username && x.password == account.password))
                 {
-                    if (element.email == account.email && element.username == account.username && element.password == encryptedPassword)
-                    {
-                        var playerCollection = db.GetCollection<Player>("Players");
+                    var playerCollection = db.GetCollection<Player>("Players");
+                    var filter = Builders<Player>.Filter.Eq(x => x.id, account.id);
+                    var update = Builders<Player>.Update.Set(x => x.status, true);
 
-                        var filter = Builders<Player>.Filter.Eq(x => x.id, account.id);
+                    playerCollection.FindOneAndUpdate(filter, update); ///status??
 
-                        var update = Builders<Player>.Update.Set(x => x.status, true);
-
-                        playerCollection.FindOneAndUpdate(filter, update); ///status??
-
-
-
-                         
-                  
-                        return true;
-                    }
+                    return true;
                 }
             }
             catch(Exception e)
             {
                 return false;
             }
+
             return false;
         }
 
@@ -115,6 +107,28 @@ namespace PlayerMatcher_RestAPI.Controllers
             }
         }
 
+        public bool UpdatePlayerStatus(Player player, bool status) //Oyuncunun bilgileri güncellenirken kullanılan metot
+        {
+            try
+            {
+                var db = client.GetDatabase("Store");
+                var collection = db.GetCollection<Player>("Players");
+
+                var filter = Builders<Player>.Filter.Eq(x => x.id, player.id);
+
+                var update = Builders<Player>.Update.Set(x => x.status, status);
+
+                collection.FindOneAndUpdate(filter, update);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return false;
+            }
+        }
+
         public Player FindPlayer(string username)//Aranan bir oyuncununun sunucuda yer alıp almadığını kontrol eden metot
         {
             var db = client.GetDatabase("Store");
@@ -122,6 +136,17 @@ namespace PlayerMatcher_RestAPI.Controllers
             List<Player> players = collection.Find(new BsonDocument()).ToList();
    
             Player player = players.Find(x => x.username == username);
+            return player;
+        }
+
+        public Account FindAccount(string username)//Aranan bir oyuncununun sunucuda yer alıp almadığını kontrol eden metot
+        {
+            var db = client.GetDatabase("Store");
+            var collection = db.GetCollection<Account>("Accounts");
+            List<Account> accounts = collection.Find(new BsonDocument()).ToList();
+
+            Account player = accounts.Find(x => x.username == username);
+
             return player;
         }
 

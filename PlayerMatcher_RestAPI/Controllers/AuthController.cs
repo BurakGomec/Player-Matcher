@@ -11,8 +11,10 @@ namespace PlayerMatcher_RestAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        //kullanıcı id'leri ve karşılık gelen tokenler 
         public static Dictionary<Guid, string> tokens = new Dictionary<Guid, string>();
 
+        //kullanıcı kayıt işlemi
         [HttpPost("signup")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -53,34 +55,36 @@ namespace PlayerMatcher_RestAPI.Controllers
             }
         }
 
+
+        //kullanıcı girişi;
         [HttpPost("signin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<string> SignIn([FromBody] Account acc)
         {
-
+            //girilen parametreler kontrol edilir
             if (ReferenceEquals(acc.email, null) || ReferenceEquals(acc.password, null) || ReferenceEquals(acc.username, null) || acc.password.Length < 6 || DatabaseOperations.shared.CheckEmail(acc.email))
                 return BadRequest();
 
-
-            Account account = new Account(Guid.NewGuid(), acc.email,acc.password,acc.username);
+            //girilen username'e göre veritabanından hesap alınır
+            var account = DatabaseOperations.shared.FindAccount(acc.username);
 
             if (DatabaseOperations.shared.CheckAccountFromDB(account))
             {
-
-                if (!tokens.ContainsKey(acc.id))
+                if (!tokens.ContainsKey(account.id))//token kütüphanesinde bu hesabın token'i yok ise
                 {
-                    string token = DatabaseOperations.shared.Encypting(acc.username);
-                    tokens.Add(acc.id, token);
+                    //hesabın username değeri şifrelenir (SHA256)
+                    string token = DatabaseOperations.shared.Encypting(account.username);
+                    tokens.Add(account.id, token);
+
                     return Ok(new { token = $"{token}" });
                 }
                 else
                 {
-                    string token = tokens[acc.id];
-                    tokens.Add(acc.id, token);
-                    return Ok(new { token = $"{token}" });
-             
+                    string token = tokens[account.id];
+
+                    return Ok(new { token = $"{token}" });          
                 }
             }
             else
@@ -89,6 +93,7 @@ namespace PlayerMatcher_RestAPI.Controllers
             }
         }
 
+        //sistemden çıkış işlemi
         [HttpPost("logout")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -99,6 +104,7 @@ namespace PlayerMatcher_RestAPI.Controllers
 
             var username = data["username"];
             var token = data["token"];
+
             if (ReferenceEquals(username, null))
                 return BadRequest();
   
@@ -108,13 +114,13 @@ namespace PlayerMatcher_RestAPI.Controllers
                 return NotFound();
 
             string recordedToken = tokens[playerDB.id];
+
             if (!recordedToken.Equals(token))
                 return Unauthorized();
-               
-     
+                    
+            playerDB.status = false;//kullanıcı çıkış yaptığında offline duruma gelir
 
-                playerDB.status = false;
-            var control = DatabaseOperations.shared.UpdatePlayerStats(playerDB);
+            var control = DatabaseOperations.shared.UpdatePlayerStatus(playerDB, false);
 
             if (!control)
                 return Problem(title: "Çıkış yapılırken bir hata meydana geldi");
@@ -128,10 +134,13 @@ namespace PlayerMatcher_RestAPI.Controllers
 
 
         [HttpDelete("delete")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public ActionResult<bool> DeleteUser()
+        public ActionResult<bool> DeleteUser(string username, string token)
         {
+
+
             return true;
         }
 
