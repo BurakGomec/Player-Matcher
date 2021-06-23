@@ -67,7 +67,7 @@ namespace PlayerMatcher_RestAPI.Controllers
 
             #region kNN
             //oyuncuların id leri ile öklid uzaklıkları hash lenir
-            var euclideanDistances = new Dictionary<Guid, double>();
+            List<double> euclideanDistances = new List<double>();
 
             for (int i = 0; i < ids.Count; i++)
             {
@@ -79,16 +79,14 @@ namespace PlayerMatcher_RestAPI.Controllers
 
                     if(opponentCandidate.status)//rakip adayı online ise
                     {
-                        euclideanDistances.Add(ids[i], distance);
+                        euclideanDistances.Add(distance);
                     }                   
                 }
             }
 
-            //uzaklıklar azalan bir şekilde sıralanırlar
-            euclideanDistances = euclideanDistances.OrderByDescending(x => x.Value).ToDictionary(y => y.Key, z => z.Value);
+            int index = euclideanDistances.IndexOf(euclideanDistances.Max());
 
-            //0. index de ki id ye sahip olan player2 bulunur
-            Player player2 = allPlayers.Find(x => x.id == euclideanDistances.ElementAt(0).Key);
+            Player player2 = allPlayers[index];
             #endregion
 
             return player2;
