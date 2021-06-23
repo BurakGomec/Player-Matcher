@@ -26,7 +26,6 @@ namespace PlayerMatcher_RestAPI.Controllers
 
                 foreach (var element in allDocuments)
                 {
-                    Console.WriteLine("DEBUG: encrypted: " + encryptedPassword + "DB:" +element.password);
                     if (element.email == account.email && element.username == account.username && element.password == encryptedPassword)
                     {
                         var playerCollection = db.GetCollection<Player>("Players");
@@ -36,12 +35,16 @@ namespace PlayerMatcher_RestAPI.Controllers
                         var update = Builders<Player>.Update.Set(x => x.status, true);
 
                         playerCollection.FindOneAndUpdate(filter, update); ///status??
+
+
+
+                         
                   
                         return true;
                     }
                 }
             }
-            catch
+            catch(Exception e)
             {
                 return false;
             }
@@ -54,8 +57,6 @@ namespace PlayerMatcher_RestAPI.Controllers
             {
                 var db = client.GetDatabase("Store");
                 var collection = db.GetCollection<Account>("Accounts");
-                var password = Encypting(account.password);
-                account.password = password;
 
                 if (DuplicatedDataControl(account))//Kullanıcıdan alınan bilgiler veritabanındaki bilgilerden eşsiz ise hesap kayıt işlemi yapılıyor
                 {

@@ -78,7 +78,9 @@ namespace PlayerMatcher_RestAPI.Controllers
                 else
                 {
                     string token = tokens[acc.id];
+                    tokens.Add(acc.id, token);
                     return Ok(new { token = $"{token}" });
+             
                 }
             }
             else
@@ -105,8 +107,11 @@ namespace PlayerMatcher_RestAPI.Controllers
             if (ReferenceEquals(playerDB, null))
                 return NotFound();
 
-            if (!tokens.Any(x => x.Key == playerDB.id && x.Value == token))
-                return Unauthorized();  
+            string recordedToken = tokens[playerDB.id];
+            if (!recordedToken.Equals(token))
+                return Unauthorized();
+               
+     
 
                 playerDB.status = false;
             var control = DatabaseOperations.shared.UpdatePlayerStats(playerDB);
@@ -114,7 +119,7 @@ namespace PlayerMatcher_RestAPI.Controllers
             if (!control)
                 return Problem(title: "Çıkış yapılırken bir hata meydana geldi");
 
-            //player'ın id si ile eşleşen Guid-string'i siler;
+            //Player'ın id si ile eşleşen Guid-string'i siler;
             tokens.Remove(playerDB.id);
 
             return Ok();
