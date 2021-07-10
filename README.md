@@ -34,8 +34,5 @@ First of all, create a MongoDB database and receive a connection string. After t
 A native iOS application was used to test the API. You can reach the repo from [here](https://github.com/BurakGomec/Player-Matcher-iOS-App). </br>
 
 ## The Client App's Preview
-![App Gif](https://github.com/BurakGomec/Player-Matcher-iOS-App/blob/main/screen.gif)
-
-
-
+<img src="https://github.com/BurakGomec/Player-Matcher-iOS-App/blob/main/screen.gif" width="25%" height="25%"/>
 
